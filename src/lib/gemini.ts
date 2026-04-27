@@ -6,13 +6,34 @@ if (typeof window !== 'undefined' && 'Worker' in window) {
   pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 }
 
-// Support both the AI Studio environment injection and custom user injection
-const apiKey = process.env.GEMINI_API_KEY;
-if (!apiKey) {
-  console.warn("Gemini API key is missing. AI features will not work.");
-}
+// Lazy init the AI client to avoid crashing on start if the key is missing in Vite build.
+// Also allows picking up a user-provided key.
+let _aiClient: any = null;
 
-export const ai = new GoogleGenAI({ apiKey });
+export function getAIClient() {
+  if (_aiClient) return _aiClient;
+  
+  let apiKey = process.env.GEMINI_API_KEY;
+  
+  // Also check if the user provided one in ProfilePage
+  if (typeof window !== 'undefined') {
+    const savedKey = localStorage.getItem('vellum_gemini_key');
+    if (savedKey) {
+      try {
+        const decoded = atob(savedKey);
+        if (decoded) apiKey = decoded;
+      } catch(e) {}
+    }
+  }
+
+  if (!apiKey) {
+    console.warn("Gemini API key is missing. AI features will fail. Using dummy key to prevent crash.");
+    apiKey = 'DUMMY_KEY_TO_PREVENT_LOAD_CRASH';
+  }
+
+  _aiClient = new GoogleGenAI({ apiKey });
+  return _aiClient;
+}
 
 export async function extractPDFText(file: File): Promise<string> {
   const arrayBuffer = await file.arrayBuffer();
@@ -37,6 +58,7 @@ export async function extractPDFText(file: File): Promise<string> {
 
 export async function* chatWithPDF(pdfText: string, conversationHistory: any[], userMessage: string) {
   // We use streaming chat approach
+  const ai = getAIClient();
   const chat = ai.chats.create({
     model: 'gemini-3.1-flash-preview',
     config: {
@@ -65,6 +87,7 @@ export async function summarizePDF(pdfText: string, style: 'brief'|'detailed'|'b
   ${style === 'brief' ? 'Keep it under 150 words.' : ''}
   Document:\n\n${pdfText}`;
   
+  const ai = getAIClient();
   const response = await ai.models.generateContent({
     model: 'gemini-3.1-flash-preview',
     contents: prompt
@@ -77,6 +100,7 @@ export async function translatePDF(pdfText: string, targetLanguage: string) {
   const prompt = `Translate the following document content to ${targetLanguage}. 
   Maintain formatting and structure. Document:\n\n${pdfText}`;
   
+  const ai = getAIClient();
   const response = await ai.models.generateContent({
     model: 'gemini-3.1-flash-preview',
     contents: prompt
@@ -86,6 +110,7 @@ export async function translatePDF(pdfText: string, targetLanguage: string) {
 }
 
 export async function extractKeyPoints(pdfText: string): Promise<string[]> {
+  const ai = getAIClient();
   const response = await ai.models.generateContent({
     model: 'gemini-3.1-flash-preview',
     contents: `Extract the main key points from this document. Document:\n\n${pdfText}`,
@@ -112,6 +137,7 @@ export async function suggestFilename(pdfText: string) {
   const prompt = `Based on this document, suggest a concise, professional filename (no extension, use hyphens). 
   Document preview:\n${pdfText.slice(0, 2000)}`;
   
+  const ai = getAIClient();
   const response = await ai.models.generateContent({
     model: 'gemini-3.1-flash-preview',
     contents: prompt
