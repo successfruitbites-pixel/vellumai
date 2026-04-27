@@ -1,0 +1,6 @@
+{
+  "name": "PDF Maestro AI",
+  "description": "A powerful PDF and image manipulation tool powered by AI.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": []
+}

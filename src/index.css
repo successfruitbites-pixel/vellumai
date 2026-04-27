@@ -1,0 +1,75 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --brand-primary: #3B82F6;
+  --brand-gold: #C9A84C;
+  --surface-glass: rgba(255, 255, 255, 0.7);
+  --gradient-hero: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+}
+
+.dark {
+  --surface-glass: rgba(15, 23, 42, 0.7);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  @apply bg-slate-50 text-slate-900 dark:bg-brand-navy dark:text-slate-50;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #94a3b8;
+  border-radius: 20px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #475569;
+}
+
+.glass-card {
+  background: var(--surface-glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-glass, 0 8px 32px rgba(0, 0, 0, 0.08));
+}
+
+.dark .glass-card {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.glass-card-dark {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gradient-text {
+  background: var(--gradient-hero);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.section-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 96px 48px;
+}
+
+@media (max-width: 639px) {
+  .section-container {
+    padding: 64px 24px;
+  }
+}
