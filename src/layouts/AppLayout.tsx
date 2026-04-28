@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { 
   Menu, X, Home, Wrench, Bot, FolderClosed, User, 
-  Moon, Sun, Plus, Crown, FileText 
+  Moon, Sun, Plus, Crown, FileText, FolderOpen 
 } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 
@@ -162,36 +162,38 @@ export default function AppLayout() {
       </aside>
 
       {/* MAIN CONTENT AREA */}
-      <main className="flex-1 md:ml-[240px] pb-24 md:pb-0 w-full min-h-screen">
+      <main className="flex-1 md:ml-[240px] pb-20 lg:pb-0 w-full min-h-screen">
         <div className="max-w-[1280px] mx-auto p-4 md:p-8 w-full">
           <Outlet />
         </div>
       </main>
 
       {/* MOBILE BOTTOM NAV */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-slate-100 dark:border-white/10 z-40 pb-safe">
-        <div className="flex items-center justify-around px-2 py-2">
-          {navItems.map((item) => {
-            const active = isActive(item.path, item.activeMatch);
-            return (
-              <NavLink 
-                key={item.name} 
-                to={item.path} 
-                className="flex flex-col items-center justify-center p-2 relative w-16"
-              >
-                <div className={`mb-1 transition-colors ${active ? 'text-brand-primary dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}`}>
-                  {item.icon}
-                </div>
-                <span className={`text-[10px] font-medium transition-colors ${active ? 'text-brand-primary dark:text-blue-400' : 'text-slate-500'}`}>
-                  {item.name.split(' ')[0]} {/* Shorten name for mobile */}
-                </span>
-                {item.name === 'AI Assistant' && isPro && (
-                  <span className="absolute top-2 right-4 w-2 h-2 rounded-full bg-brand-gold border-2 border-white dark:border-slate-900"></span>
-                )}
-              </NavLink>
-            )
-          })}
-        </div>
+      <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800 flex items-center justify-around px-1 pb-[env(safe-area-inset-bottom)]">
+        {[
+          { name: 'Home', path: '/app', icon: <Home size={20} />, activeMatch: '/app' },
+          { name: 'Tools', path: '/app/tools', icon: <Wrench size={20} />, activeMatch: '/app/tools' },
+          { name: 'AI', path: '/app/ai', icon: <Bot size={20} />, activeMatch: '/app/ai' },
+          { name: 'Files', path: '/app/files', icon: <FolderOpen size={20} />, activeMatch: '/app/files' },
+          { name: 'Profile', path: '/app/profile', icon: <User size={20} />, activeMatch: '/app/profile' },
+        ].map((item) => {
+          const active = isActive(item.path, item.activeMatch);
+          return (
+            <NavLink 
+              key={item.name} 
+              to={item.path} 
+              className={`flex flex-col items-center gap-1 flex-1 py-1 relative transition-colors ${active ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}`}
+            >
+              {item.icon}
+              <span className="text-[10px] font-medium whitespace-nowrap">
+                {item.name}
+              </span>
+              {item.name === 'AI' && isPro && (
+                <span className="absolute top-1 right-[20%] w-2 h-2 rounded-full bg-brand-gold border-2 border-white dark:border-slate-900"></span>
+              )}
+            </NavLink>
+          )
+        })}
       </nav>
 
     </div>

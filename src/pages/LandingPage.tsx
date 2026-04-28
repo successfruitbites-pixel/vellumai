@@ -60,68 +60,57 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-brand-navy dark:text-white transition-colors duration-300 font-dm-sans selection:bg-brand-primary/30 relative overflow-hidden">
       
-      {/* CSS Animations */}
-      <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-12px); }
-        }
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        .animate-float-delayed {
-          animation: float 6s ease-in-out infinite;
-          animation-delay: 2s;
-        }
-        .animate-float-fast {
-          animation: float 5s ease-in-out infinite;
-          animation-delay: 1s;
-        }
-      `}</style>
-      
       {/* SECTION 1 - NAVBAR */}
-      <nav className="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-b border-slate-100 dark:border-white/10 transition-colors duration-300">
+      <nav className="sticky top-0 z-50 bg-white/85 dark:bg-slate-900/85 backdrop-blur-lg border-b border-slate-100 dark:border-slate-800 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
           
           {/* Logo */}
-          <div className="flex items-center gap-3 cursor-pointer">
-            <div className="w-10 h-10 rounded-xl bg-brand-primary text-white flex items-center justify-center font-syne font-bold text-xl shadow-lg shadow-blue-500/30">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.location.href = '/'}>
+            <div className="w-9 h-9 rounded-xl bg-brand-primary text-white flex items-center justify-center font-syne font-bold text-xl shadow-lg shadow-blue-500/30">
               V
             </div>
-            <span className="font-syne font-extrabold text-xl tracking-tight text-slate-900 dark:text-white hidden sm:block">
+            <span className="font-syne font-bold text-xl tracking-tight text-slate-800 dark:text-white">
               Vellum AI
             </span>
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-gold/20 text-yellow-600 dark:text-yellow-400 border border-brand-gold/30">
-              PRO
+            <span 
+              onClick={(e) => { e.stopPropagation(); window.location.href = '#pricing'; }}
+              className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-100/80 text-slate-600 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hidden sm:inline-flex hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+            >
+              <span className="mr-1 text-xs text-brand-gold">✦</span> Upgrade to Pro
             </span>
           </div>
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-8 font-medium text-slate-600 dark:text-slate-300">
-            <a href="#tools" className="hover:text-brand-primary transition-colors">Tools</a>
-            <a href="#ai" className="hover:text-brand-primary transition-colors flex items-center gap-1">
-              <Wand2 size={16} className="text-brand-primary" /> AI Assistant
+            <a href="#tools" className="text-sm hover:text-slate-900 dark:hover:text-white transition-colors">Tools</a>
+            <a href="#ai" className="text-sm hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-1">
+              <Wand2 size={16} className="text-blue-600 dark:text-blue-400" /> AI Assistant
             </a>
-            <a href="#pricing" className="hover:text-brand-primary transition-colors">Pricing</a>
-            <a href="#privacy" className="hover:text-brand-primary transition-colors">Privacy</a>
+            <a href="#pricing" className="text-sm hover:text-slate-900 dark:hover:text-white transition-colors">Pricing</a>
+            <a href="#privacy" className="text-sm hover:text-slate-900 dark:hover:text-white transition-colors">About</a>
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 text-slate-600 dark:text-slate-300">
             <button 
               onClick={toggleDarkMode}
-              className="p-2 rounded-full text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400 transition-colors"
+              className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               aria-label="Toggle Dark Mode"
             >
               {darkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
             <div className="hidden sm:block">
-              <Button size="sm" variant="primary" onClick={() => window.location.href = '/app'}>Get Started Free</Button>
+              <button 
+                onClick={() => window.location.href = '/app'}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl text-sm transition-all shadow-lg shadow-blue-500/20 hover:-translate-y-0.5"
+              >
+                Get Started Free →
+              </button>
             </div>
             
             {/* Mobile Menu Toggle */}
             <button 
-              className="md:hidden p-2 text-slate-600 dark:text-slate-300"
+              className="md:hidden p-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -132,18 +121,18 @@ export default function LandingPage() {
         {/* Mobile Slide-down Drawer */}
         <div className={`md:hidden absolute top-20 left-0 w-full bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 transition-all duration-300 origin-top overflow-hidden shadow-2xl ${mobileMenuOpen ? 'max-h-96 py-4' : 'max-h-0'}`}>
           <div className="flex flex-col px-6 gap-4 font-medium text-slate-600 dark:text-slate-300">
-            <a href="#tools" onClick={() => setMobileMenuOpen(false)} className="py-2 border-b border-slate-50 dark:border-slate-800">Tools</a>
-            <a href="#ai" onClick={() => setMobileMenuOpen(false)} className="py-2 border-b border-slate-50 dark:border-slate-800 flex items-center gap-2">
-              <Wand2 size={16} className="text-brand-primary" /> AI Assistant
+            <a href="#tools" onClick={() => setMobileMenuOpen(false)} className="py-2 border-b border-slate-50 dark:border-slate-800 text-sm">Tools</a>
+            <a href="#ai" onClick={() => setMobileMenuOpen(false)} className="py-2 border-b border-slate-50 dark:border-slate-800 flex items-center gap-2 text-sm">
+              <Wand2 size={16} className="text-blue-600 dark:text-blue-400" /> AI Assistant
             </a>
-            <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="py-2 border-b border-slate-50 dark:border-slate-800">Pricing</a>
-            <a href="#privacy" onClick={() => setMobileMenuOpen(false)} className="py-2">Privacy</a>
+            <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="py-2 border-b border-slate-50 dark:border-slate-800 text-sm">Pricing</a>
+            <a href="#privacy" onClick={() => setMobileMenuOpen(false)} className="py-2 text-sm">About</a>
           </div>
         </div>
       </nav>
 
       {/* SECTION 2 - HERO */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 lg:px-12 max-w-[1280px] mx-auto min-h-screen flex flex-col justify-center">
+      <section className="relative py-20 lg:py-28 px-6 lg:px-12 max-w-[1280px] mx-auto">
         {/* Background gradient specifically for light mode */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-brand-navy dark:via-slate-900 dark:to-blue-950/20 -z-20"></div>
         {/* Decorative blob behind visual */}
@@ -182,47 +171,51 @@ export default function LandingPage() {
           </div>
 
           {/* Right Visual Floating Cards */}
-          <div className="relative h-[400px] lg:h-[600px] hidden sm:flex items-center justify-center animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 delay-200">
-            {/* Card 1 */}
-            <GlassCard className="absolute z-30 -left-4 md:left-10 lg:-left-10 top-1/4 p-4 w-64 animate-float flex items-center gap-4 bg-white/80 dark:bg-slate-800/80 shadow-2xl">
-              <div className="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-brand-primary">
-                <FileText size={24} />
-              </div>
-              <div>
-                <h3 className="font-syne font-bold text-slate-900 dark:text-white">Merge PDF</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Processing 3 files...</p>
-              </div>
-            </GlassCard>
-
-            {/* Card 2 - Center Prominent */}
-            <GlassCard className="absolute z-20 left-1/2 -translate-x-1/2 md:translate-x-0 md:left-auto md:-right-4 top-1/3 p-6 w-72 animate-float-delayed flex flex-col gap-4 bg-white/90 dark:bg-slate-900/90 shadow-[0_20px_50px_rgba(59,130,246,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-t-2 border-t-purple-400">
-              <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-brand-primary flex items-center justify-center text-white">
-                  <MessageSquare size={20} />
-                </div>
-                <div>
-                  <h3 className="font-syne font-bold text-sm text-slate-900 dark:text-white">AI Chat</h3>
-                  <p className="text-xs text-slate-500">Analyzing document</p>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <div className="h-2 bg-slate-100 dark:bg-slate-800 rounded w-full"></div>
-                <div className="h-2 bg-slate-100 dark:bg-slate-800 rounded w-5/6"></div>
-                <div className="h-2 bg-brand-primary/20 rounded w-4/6 mt-4"></div>
-              </div>
-            </GlassCard>
-
-            {/* Card 3 */}
-            <GlassCard className="absolute z-10 left-12 md:left-24 lg:left-12 bottom-1/4 p-4 w-56 animate-float-fast flex items-center gap-4 bg-white/80 dark:bg-slate-800/80 shadow-2xl border-l-4 border-l-emerald-400">
-              <div className="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                <ShieldCheck size={20} />
-              </div>
-              <div>
-                <h3 className="font-syne font-bold text-slate-900 dark:text-white text-sm">Secure PDF</h3>
-                <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">Encrypted</p>
-              </div>
-            </GlassCard>
+          <div className="relative hidden lg:flex items-center justify-center p-8">
+            {/* Background glow */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-brand-primary/20 via-transparent to-brand-gold/20 blur-3xl rounded-full"></div>
             
+            {/* Card stack */}
+            <div className="relative w-full max-w-sm">
+
+              {/* Card 1 */}
+              <div className="absolute -top-12 -left-12 p-4 bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-64 border border-slate-100 dark:border-slate-700 animate-float z-20 flex gap-4 items-center">
+                <div className="text-3xl bg-blue-50 dark:bg-slate-700 p-3 rounded-xl">📄</div>
+                <div>
+                  <div className="font-bold text-sm dark:text-white">Merge PDF</div>
+                  <div className="text-xs text-slate-500">3 files → 1 document</div>
+                </div>
+                <div className="ml-auto text-green-500 font-bold">✓</div>
+              </div>
+
+              {/* Card 2 — offset right, delayed */}
+              <div className="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full border border-slate-100 dark:border-slate-700 animate-float" style={{ animationDelay: '1s' }}>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="text-3xl bg-amber-50 dark:bg-slate-700 p-3 rounded-xl">🤖</div>
+                  <div>
+                    <div className="font-bold dark:text-white">AI Chat</div>
+                    <div className="text-sm text-slate-500">Ask anything...</div>
+                  </div>
+                  <div className="ml-auto text-xs bg-brand-gold text-yellow-900 px-2 py-1 rounded-full font-bold">PRO</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded w-full"></div>
+                  <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded w-5/6"></div>
+                  <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded w-4/6"></div>
+                </div>
+              </div>
+
+              {/* Card 3 — back to left, more delay */}
+              <div className="absolute -bottom-16 -right-8 p-4 bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-64 border border-slate-100 dark:border-slate-700 animate-float z-30 flex gap-4 items-center" style={{ animationDelay: '2s' }}>
+                <div className="text-3xl bg-rose-50 dark:bg-slate-700 p-3 rounded-xl">🔒</div>
+                <div>
+                  <div className="font-bold text-sm dark:text-white">Lock PDF</div>
+                  <div className="text-xs text-slate-500">Password protected</div>
+                </div>
+                <div className="ml-auto text-green-500 font-bold">✓</div>
+              </div>
+
+            </div>
           </div>
         </div>
       </section>
