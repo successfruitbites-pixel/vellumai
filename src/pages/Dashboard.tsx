@@ -20,8 +20,8 @@ export default function Dashboard() {
     else setGreeting('Good evening');
   }, []);
 
-  const { allowed, remaining } = checkTaskLimit();
-  const progressPercent = isPro ? 100 : Math.min(100, Math.max(0, ((MAX_FREE_TASKS - remaining) / MAX_FREE_TASKS) * 100));
+  const remaining = Math.max(0, MAX_FREE_TASKS - dailyTaskCount);
+  const progressPercent = isPro ? 100 : Math.round((remaining / MAX_FREE_TASKS) * 100);
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
