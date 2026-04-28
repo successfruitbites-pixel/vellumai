@@ -16,6 +16,8 @@ import AIChatPage from './pages/AIChatPage';
 import FilesPage from './pages/FilesPage';
 import ProfilePage from './pages/ProfilePage';
 import PricingPage from './pages/PricingPage';
+import PrivacyPage from './pages/PrivacyPage';
+import TermsPage from './pages/TermsPage';
 import { 
   NotFoundPage 
 } from './pages/Placeholders';
@@ -48,6 +50,8 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
           
           <Route path="/app" element={<AppLayout />}>
             <Route index element={<Dashboard />} />
