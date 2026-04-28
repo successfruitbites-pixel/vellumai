@@ -42,10 +42,10 @@ export const ToolCard: React.FC<ToolCardProps> = ({
   return (
     <div 
       onClick={onClick}
-      className={`glass-card dark:glass-card-dark rounded-2xl p-6 flex flex-col h-full relative group cursor-pointer hover:-translate-y-1 transition-all duration-300 ${className}`}
+      className={`glass-card dark:glass-card-dark rounded-2xl p-4 sm:p-5 flex flex-col h-full relative group cursor-pointer hover:-translate-y-1 transition-all duration-300 ${className}`}
     >
       {badge && (
-        <div className="absolute top-4 right-4 z-10">
+        <div className="absolute top-2 right-2 z-10">
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-bold bg-white/50 dark:bg-slate-800/50 backdrop-blur-md shadow-sm border border-slate-200/50 dark:border-slate-700">
             {badge}
           </span>
@@ -60,9 +60,9 @@ export const ToolCard: React.FC<ToolCardProps> = ({
 
       <h3 className="font-syne text-xl font-bold text-slate-900 dark:text-white mb-2">{title}</h3>
       
-      <p className="font-dm-sans text-slate-500 dark:text-slate-400 flex-grow text-sm leading-relaxed mb-4">{description}</p>
+      <p className="font-dm-sans text-slate-500 dark:text-slate-400 flex-grow text-sm leading-relaxed mb-4 line-clamp-2">{description}</p>
 
-      <div className="mt-auto opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 font-bold text-sm flex items-center gap-1 text-slate-900 dark:text-white">
+      <div className="mt-auto opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 font-bold text-sm hidden sm:flex items-center gap-1 text-slate-900 dark:text-white">
         Open tool →
       </div>
     </div>

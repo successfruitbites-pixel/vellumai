@@ -69,48 +69,38 @@ export default function Dashboard() {
 
       {/* QUICK TOOLS GRID */}
       <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-syne font-bold text-xl text-slate-900 dark:text-white">Quick Tools</h2>
-          <button 
-            onClick={() => navigate('/app/tools')} 
-            className="text-sm font-bold text-brand-primary hover:text-blue-700 transition-colors flex items-center gap-1"
-          >
-            Browse All <ArrowRight size={14} />
-          </button>
-        </div>
+        <h2 className="font-syne font-bold text-xl text-slate-900 dark:text-white mb-4">Quick Tools</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           {[
-            { id: 'merge', title: 'Merge PDF', desc: 'Combine multiple files', icon: <FileText size={28} />, color: 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400' },
-            { id: 'compress', title: 'Compress PDF', desc: 'Reduce file size', icon: <Minimize2 size={28} />, color: 'bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400' },
-            { id: 'ai-chat', title: 'AI Chat', desc: 'Chat with any document', icon: <MessageSquare size={28} />, color: 'bg-purple-100 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400', badge: !isPro ? 'PRO' : null },
-            { id: 'split', title: 'Split PDF', desc: 'Extract pages easily', icon: <Scissors size={28} />, color: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400' },
+            { id: 'tools/merge', title: 'Merge PDF', icon: <FileText size={24} />, color: 'bg-blue-50 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400' },
+            { id: 'tools/compress', title: 'Compress PDF', icon: <Minimize2 size={24} />, color: 'bg-indigo-50 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400' },
+            { id: 'ai', title: 'AI Chat', icon: <MessageSquare size={24} />, color: 'bg-purple-50 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400' },
+            { id: 'tools/scanner', title: 'Scanner', icon: <ScanLine size={24} />, color: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400' },
           ].map(tool => (
-            <GlassCard 
+            <div 
               key={tool.id} 
-              hover 
-              className="p-5 flex flex-col group cursor-pointer border border-transparent shadow-sm dark:shadow-none hover:border-blue-200 dark:hover:border-blue-900/50"
-              onClick={() => navigate(`/app/tools/${tool.id}`)}
+              onClick={() => navigate(`/app/${tool.id}`)}
+              className="glass-card dark:glass-card-dark rounded-2xl p-4 flex flex-col items-center justify-center text-center group cursor-pointer hover:-translate-y-1 transition-all duration-300 relative"
             >
-              <div className="flex justify-between items-start mb-4">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 ${tool.color}`}>
-                  {tool.icon}
-                </div>
-                {tool.badge && (
-                  <span className="text-[10px] font-bold bg-brand-gold/10 text-yellow-600 dark:text-yellow-400 border border-brand-gold/20 px-2 py-0.5 rounded-full uppercase tracking-wide">
-                    {tool.badge}
-                  </span>
-                )}
-                {!tool.badge && (
-                  <div className="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <ArrowUpRight size={16} />
-                  </div>
-                )}
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 transition-transform group-hover:scale-110 ${tool.color}`}>
+                {tool.icon}
               </div>
-              <h3 className="font-syne font-bold text-lg text-slate-900 dark:text-white mb-1 group-hover:text-brand-primary transition-colors">{tool.title}</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">{tool.desc}</p>
-            </GlassCard>
+              <h3 className="font-syne font-bold text-sm text-slate-900 dark:text-white group-hover:text-brand-primary transition-colors">{tool.title}</h3>
+              <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400">
+                <ArrowRight size={14} />
+              </div>
+            </div>
           ))}
+        </div>
+
+        <div className="mt-4 flex justify-center">
+          <div 
+            onClick={() => navigate('/app/tools')}
+            className="text-sm font-medium text-blue-600 dark:text-blue-400 cursor-pointer hover:underline"
+          >
+            Browse All 15 Tools →
+          </div>
         </div>
       </div>
 
