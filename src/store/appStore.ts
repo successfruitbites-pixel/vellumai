@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 
 export interface User {
   name: string;
-  email: string;
+  email: string | null;
   avatar: string | null;
 }
 
@@ -42,7 +42,7 @@ export const useAppStore = create<AppState>()(
     (set, get) => ({
       darkMode: false,
       isPro: false,
-      user: { name: 'Emmanuel', email: 'hello@vellum.ai', avatar: null }, // Demo user
+      user: { name: 'Emmanuel', email: null, avatar: null }, // Demo user
       recentFiles: [],
       dailyTaskCount: 0,
       lastTaskDate: new Date().toDateString(),
