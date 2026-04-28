@@ -24,7 +24,7 @@ export default function Dashboard() {
   const progressPercent = isPro ? 100 : Math.round((remaining / MAX_FREE_TASKS) * 100);
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/20 to-indigo-50/10 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 -m-4 md:-m-8 p-4 md:p-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
       {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">

@@ -38,7 +38,7 @@ export default function ToolsPage() {
   }, [searchQuery, activeCategory]);
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/20 to-indigo-50/10 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 -m-4 md:-m-8 p-4 md:p-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
       {/* HEADER & SEARCH */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">

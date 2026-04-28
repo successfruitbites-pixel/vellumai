@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { 
   Menu, X, Home, Wrench, Bot, FolderClosed, User, 
@@ -27,6 +27,11 @@ export default function AppLayout() {
     return location.pathname.startsWith(activeMatch);
   };
 
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileMenuOpen]);
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-brand-navy selection:bg-brand-primary/30 transition-colors duration-300 flex flex-col md:flex-row font-dm-sans">
       
@@ -51,59 +56,70 @@ export default function AppLayout() {
       </header>
 
       {/* MOBILE SLIDE DRAWER */}
+      {/* LAYER 1 — Backdrop overlay */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-50 flex">
-          <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)}></div>
-          <div className="relative w-64 max-w-xs bg-white dark:bg-slate-900 h-full shadow-2xl flex flex-col">
-            <div className="p-4 flex items-center justify-between border-b border-slate-100 dark:border-white/10">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-brand-primary text-white flex items-center justify-center font-syne font-bold">V</div>
-                <span className="font-syne font-bold text-lg dark:text-white">Vellum AI</span>
+        <div 
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* LAYER 2 — Drawer panel */}
+      <div 
+        className={`md:hidden fixed top-0 left-0 w-64 h-full bg-white dark:bg-slate-900 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} flex flex-col`}
+      >
+        <div className="p-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-brand-primary text-white flex items-center justify-center font-syne font-bold shadow-sm">V</div>
+            <span className="font-syne font-bold text-lg text-slate-800 dark:text-white">Vellum AI</span>
+          </div>
+          <button 
+            onClick={() => setMobileMenuOpen(false)} 
+            className="p-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            aria-label="Close menu"
+          >
+            <X size={20} />
+          </button>
+        </div>
+        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.name}
+              to={item.path}
+              onClick={() => { navigate(item.path); setMobileMenuOpen(false); }}
+              className={({ isActive: isMatched }) =>
+                `flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${
+                  isActive(item.path, item.activeMatch)
+                    ? 'bg-blue-50 dark:bg-brand-primary/10 text-brand-primary dark:text-blue-400'
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`
+              }
+            >
+              {item.icon}
+              {item.name}
+              {item.badge && (
+                <span className="ml-auto inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-brand-gold/10 text-brand-gold border border-brand-gold/20">
+                  {item.badge}
+                </span>
+              )}
+            </NavLink>
+          ))}
+        </nav>
+        {!isPro && (
+          <div className="p-4 border-t border-slate-100 dark:border-slate-800">
+            <div className="bg-gradient-to-r from-amber-400 to-yellow-300 rounded-xl p-4 text-black shadow-lg">
+              <div className="flex items-center gap-2 font-bold mb-1">
+                <Crown size={16} /> Upgrade to Pro
               </div>
-              <button onClick={() => setMobileMenuOpen(false)} className="p-1.5 text-slate-500 dark:text-slate-400">
-                <X size={20} />
+              <p className="text-xs opacity-80 mb-3">Unlock AI + unlimited tasks</p>
+              <button onClick={() => { setMobileMenuOpen(false); navigate('/app/pricing'); }} className="w-full py-1.5 px-3 bg-black/10 hover:bg-black/20 rounded-lg text-sm font-medium transition-colors">
+                View Plans
               </button>
             </div>
-            <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-              {navItems.map((item) => (
-                <NavLink
-                  key={item.name}
-                  to={item.path}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={({ isActive: isMatched }) =>
-                    `flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${
-                      isActive(item.path, item.activeMatch)
-                        ? 'bg-blue-50 dark:bg-brand-primary/10 text-brand-primary dark:text-blue-400'
-                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                    }`
-                  }
-                >
-                  {item.icon}
-                  {item.name}
-                  {item.badge && (
-                    <span className="ml-auto inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-brand-gold/10 text-brand-gold border border-brand-gold/20">
-                      {item.badge}
-                    </span>
-                  )}
-                </NavLink>
-              ))}
-            </nav>
-            {!isPro && (
-              <div className="p-4 border-t border-slate-100 dark:border-white/10">
-                <div className="bg-gradient-to-r from-amber-400 to-yellow-300 rounded-xl p-4 text-black shadow-lg">
-                  <div className="flex items-center gap-2 font-bold mb-1">
-                    <Crown size={16} /> Upgrade to Pro
-                  </div>
-                  <p className="text-xs opacity-80 mb-3">Unlock AI + unlimited tasks</p>
-                  <button onClick={() => { setMobileMenuOpen(false); navigate('/app/pricing'); }} className="w-full py-1.5 px-3 bg-black/10 hover:bg-black/20 rounded-lg text-sm font-medium transition-colors">
-                    View Plans
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* DESKTOP SIDEBAR */}
       <aside className="hidden md:flex flex-col fixed top-0 left-0 w-[240px] h-screen bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border-r border-slate-100 dark:border-white/10 z-30">
