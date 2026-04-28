@@ -125,20 +125,33 @@ export default function ProfilePage() {
       <h1 className="font-syne font-bold text-3xl dark:text-white mb-2">Profile Settings</h1>
       
       {/* Header Profile Info */}
-      <GlassCard className="p-8 flex items-center gap-6">
-        <div className="w-20 h-20 bg-brand-primary text-white rounded-full flex items-center justify-center text-2xl font-bold uppercase shrink-0 shadow-lg border-2 border-white dark:border-slate-800">
+      <GlassCard className="p-8 flex items-center gap-4 sm:gap-6 overflow-hidden">
+        {/* Avatar — fixed size, never shrinks */}
+        <div className="w-20 h-20 bg-brand-primary text-white rounded-full flex items-center justify-center text-2xl font-bold uppercase shrink-0 shadow-lg border-2 border-white dark:border-slate-800 flex-shrink-0">
           {user.avatar ? <img src={user.avatar} alt="Avatar" className="w-full h-full rounded-full object-cover" /> : getInitials(user.name)}
         </div>
-        <div>
-          <h2 className="text-2xl font-bold font-syne dark:text-white flex items-center gap-3">
-            {user.name}
-            {isPro ? (
-              <span className="text-xs font-bold bg-brand-gold text-yellow-900 px-2 py-0.5 rounded-full uppercase tracking-wide flex items-center gap-1"><span className="text-xs">⚡</span> Pro</span>
-            ) : (
-              <span className="text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 px-2 py-0.5 rounded-full uppercase tracking-wide">Free Plan</span>
-            )}
+
+        {/* Name + Email — takes remaining space, truncates if needed */}
+        <div className="min-w-0 flex-1">
+          <h2 className="text-xl sm:text-2xl font-bold font-syne dark:text-white truncate">
+            {user.name || 'User'}
           </h2>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">{user.email}</p>
+          <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400 mt-1 truncate">
+            {user.email || 'No email connected'}
+          </p>
+        </div>
+
+        {/* Plan badge — fixed, never shrinks or gets clipped */}
+        <div className="flex-shrink-0 shrink-0">
+          {isPro ? (
+            <span className="text-xs font-bold bg-brand-gold text-yellow-900 px-3 py-1.5 rounded-full uppercase tracking-wide flex items-center gap-1 shadow-sm">
+              <span className="text-xs">⚡</span> PRO
+            </span>
+          ) : (
+            <span className="text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 px-3 py-1.5 rounded-full uppercase tracking-wide border border-slate-200 dark:border-slate-600">
+              FREE PLAN
+            </span>
+          )}
         </div>
       </GlassCard>
 
