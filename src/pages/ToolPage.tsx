@@ -15,6 +15,9 @@ const ImageResizerTool = lazy(() => import('../tools/image-resizer'));
 const AIUpscaleTool = lazy(() => import('../tools/ai-upscale'));
 const BgRemovalTool = lazy(() => import('../tools/bg-removal'));
 const ScannerTool = lazy(() => import('../tools/scanner'));
+const EditPdfTool = lazy(() => import('../tools/edit-pdf'));
+const WordToPdfTool = lazy(() => import('../tools/word-to-pdf'));
+const ExcelToPdfTool = lazy(() => import('../tools/excel-to-pdf'));
 
 export default function ToolPage() {
   const { toolId } = useParams();
@@ -35,6 +38,9 @@ export default function ToolPage() {
       case 'ai-upscale': return <AIUpscaleTool />;
       case 'bg-removal': return <BgRemovalTool />;
       case 'scanner': return <ScannerTool />;
+      case 'edit-pdf': return <EditPdfTool />;
+      case 'word-to-pdf': return <WordToPdfTool />;
+      case 'excel-to-pdf': return <ExcelToPdfTool />;
       default: return (
         <div className="text-center py-20">
           <h2 className="text-2xl font-bold mb-4 dark:text-white">Tool not found or under construction</h2>

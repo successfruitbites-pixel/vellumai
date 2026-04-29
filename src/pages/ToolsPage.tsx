@@ -1,18 +1,21 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, FileText, Scissors, Minimize2, FileCode2, Image as ImageIcon, RefreshCw, Lock, Key, ScanLine, Wand2 } from 'lucide-react';
+import { Search, FileText, Scissors, Minimize2, FileCode2, Image as ImageIcon, RefreshCw, Lock, Key, ScanLine, Wand2, FileSignature, FileSpreadsheet } from 'lucide-react';
 import { ToolCard } from '../components/ui/ToolCard';
 
 const ALL_TOOLS = [
   { id: 'merge', title: 'Merge PDF', description: 'Combine multiple PDFs into one unified document', icon: <FileText size={24} />, category: 'PDF Tools', color: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' },
   { id: 'split', title: 'Split PDF', description: 'Extract pages or split by range', icon: <Scissors size={24} />, category: 'PDF Tools', color: 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400' },
   { id: 'compress', title: 'Compress PDF', description: 'Reduce file size without quality loss', icon: <Minimize2 size={24} />, category: 'PDF Tools', color: 'bg-violet-100 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400' },
+  { id: 'word-to-pdf', title: 'Word to PDF', description: 'Convert Word documents to PDF', icon: <FileText size={24} />, category: 'Convert', color: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' },
+  { id: 'excel-to-pdf', title: 'Excel to PDF', description: 'Convert Excel spreadsheets to PDF', icon: <FileSpreadsheet size={24} />, category: 'Convert', color: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400' },
   { id: 'pdf-to-word', title: 'PDF to Word', description: 'Convert PDFs to editable DOCX files', icon: <FileCode2 size={24} />, category: 'Convert', color: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400' },
   { id: 'pdf-to-excel', title: 'PDF to Excel', description: 'Extract tables directly into spreadsheets', icon: <FileText size={24} />, category: 'Convert', color: 'bg-teal-100 text-teal-600 dark:bg-teal-900/30 dark:text-teal-400' },
   { id: 'pdf-to-jpg', title: 'PDF to JPG', description: 'Convert every PDF page to an image', icon: <ImageIcon size={24} />, category: 'Convert', color: 'bg-cyan-100 text-cyan-600 dark:bg-cyan-900/30 dark:text-cyan-400' },
   { id: 'image-compress', title: 'Compress Image', description: 'Shrink images preserving visual quality', icon: <ImageIcon size={24} />, category: 'Image Tools', color: 'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400' },
   { id: 'image-to-webp', title: 'Convert to WebP', description: 'Convert to next-gen WebP format', icon: <RefreshCw size={24} />, category: 'Image Tools', color: 'bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400' },
   { id: 'image-resize', title: 'Resize Image', description: 'Batch resize images to any dimension', icon: <Minimize2 size={24} />, category: 'Image Tools', color: 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400' },
+  { id: 'edit-pdf', title: 'Edit PDF', description: 'Draw, highlight, redact, or add text to a PDF', icon: <FileSignature size={24} />, category: 'PDF Tools', color: 'bg-pink-100 text-pink-600 dark:bg-pink-900/30 dark:text-pink-400' },
   { id: 'lock', title: 'Lock PDF', description: 'Password-protect sensitive documents', icon: <Lock size={24} />, category: 'PDF Tools', badge: 'Pro', color: 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' },
   { id: 'unlock', title: 'Unlock PDF', description: 'Remove PDF password protection', icon: <Key size={24} />, category: 'PDF Tools', color: 'bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400' },
   { id: 'rotate', title: 'Rotate PDF', description: 'Rotate pages to the correct orientation', icon: <RefreshCw size={24} />, category: 'PDF Tools', color: 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300' },
