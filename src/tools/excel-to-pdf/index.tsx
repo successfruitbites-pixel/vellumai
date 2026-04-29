@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { PDFDocument, rgb } from 'pdf-lib';
 import { saveAs } from 'file-saver';
 import toast from 'react-hot-toast';
 import { FileSpreadsheet, ArrowRight } from 'lucide-react';
@@ -9,6 +8,8 @@ import { Button } from '../../components/ui/Button';
 import { useAppStore } from '../../store/appStore';
 import { UpgradeModal } from '../../components/UpgradeModal';
 import { GlassCard } from '../../components/ui/GlassCard';
+import * as XLSX from 'xlsx';
+import html2pdf from 'html2pdf.js';
 
 export default function ExcelToPdfTool() {
   const [file, setFile] = useState<File | null>(null);
@@ -29,28 +30,57 @@ export default function ExcelToPdfTool() {
     setIsProcessing(true);
 
     try {
-      // Simulate conversion by creating a simple PDF file with pdf-lib
-      // In a real application, this would involve a server-side conversion or a complex client-side library.
-      const pdfDoc = await PDFDocument.create();
-      const page = pdfDoc.addPage([800, 600]); // Lanscape for spreadsheet simulation
+      const arrayBuffer = await file.arrayBuffer();
+      const workbook = XLSX.read(arrayBuffer, { type: 'array' });
       
-      page.drawText(`Converted spreadsheet for: ${file.name}`, {
-        x: 50,
-        y: 500,
-        size: 16,
-        color: rgb(0, 0, 0),
+      const container = document.createElement('div');
+      
+      // Basic styling for the tables
+      container.style.fontFamily = 'Arial, sans-serif';
+      container.style.fontSize = '12px';
+      container.style.color = '#333';
+      container.style.padding = '20px';
+
+      // Iterate through all sheets and convert to HTML
+      workbook.SheetNames.forEach((sheetName, index) => {
+        const worksheet = workbook.Sheets[sheetName];
+        let htmlStr = XLSX.utils.sheet_to_html(worksheet);
+        
+        // Add a title for each sheet
+        const sheetTitle = document.createElement('h2');
+        sheetTitle.innerText = sheetName;
+        sheetTitle.style.marginTop = index === 0 ? '0' : '40px';
+        sheetTitle.style.marginBottom = '15px';
+        container.appendChild(sheetTitle);
+
+        const tableWrapper = document.createElement('div');
+        tableWrapper.innerHTML = htmlStr;
+        
+        // Apply some basic styling to the generated table
+        const table = tableWrapper.querySelector('table');
+        if (table) {
+          table.style.borderCollapse = 'collapse';
+          table.style.width = '100%';
+          
+          const cells = table.querySelectorAll('td, th');
+          cells.forEach((cell) => {
+            (cell as HTMLElement).style.border = '1px solid #ddd';
+            (cell as HTMLElement).style.padding = '8px';
+          });
+        }
+        
+        container.appendChild(tableWrapper);
       });
 
-      page.drawText('This is a simulated conversion output from an Excel file.', {
-        x: 50,
-        y: 450,
-        size: 12,
-        color: rgb(0.3, 0.3, 0.3),
-      });
+      const opt = {
+        margin:       10,
+        filename:     `${file.name.replace(/\.xlsx?$/, '')}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+      };
 
-      const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      saveAs(blob, `${file.name.replace(/\.xlsx?$/, '')}.pdf`);
+      await html2pdf().set(opt).from(container).save();
 
       toast.success('Excel spreadsheet successfully converted to PDF!');
       incrementTaskCount();

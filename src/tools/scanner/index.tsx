@@ -111,13 +111,28 @@ export default function ScannerTool() {
   };
 
   const handleUpload = async (files: File[]) => {
+    if (files.length === 0) return;
+    
+    const newPages: ScannedPage[] = [];
     for (const file of files) {
+      if (!file.type.startsWith('image/')) continue;
       const dataUrl = await new Promise<string>((resolve) => {
         const reader = new FileReader();
         reader.onload = (e) => resolve(e.target?.result as string);
         reader.readAsDataURL(file);
       });
-      addNewPage(dataUrl);
+      newPages.push({
+        id: Date.now().toString() + Math.random(),
+        originalDataUrl: dataUrl,
+        enhancedDataUrl: dataUrl,
+        settings: { brightness: 0, contrast: 100, filter: 'original' }
+      });
+    }
+    
+    if (newPages.length > 0) {
+      setPages(prev => [...prev, ...newPages]);
+      setCurrentPageId(newPages[0].id);
+      setStep(2);
     }
   };
 
@@ -331,12 +346,20 @@ export default function ScannerTool() {
         {/* STEP 1: CAPTURE */}
         {step === 1 && (
           <div className="flex-1 flex flex-col pt-2 animate-in fade-in slide-in-from-bottom-4">
-            <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl mb-6 mx-auto">
-              <button onClick={() => setCameraMode('camera')} className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${cameraMode === 'camera' ? 'bg-white dark:bg-slate-700 shadow-sm text-brand-primary' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}>
-                <Camera size={18} /> Camera
+            <div className="grid grid-cols-2 gap-4 max-w-xl mx-auto mb-6 w-full">
+              <button 
+                onClick={() => setCameraMode('camera')} 
+                className={`flex flex-col items-center justify-center p-6 gap-3 rounded-2xl border-2 transition-all ${cameraMode === 'camera' ? 'border-brand-primary bg-brand-primary/5 text-brand-primary dark:bg-brand-primary/10' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500 hover:border-slate-300 dark:hover:border-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
+              >
+                <Camera size={32} />
+                <span className="font-bold">Use Camera</span>
               </button>
-              <button onClick={() => setCameraMode('upload')} className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${cameraMode === 'upload' ? 'bg-white dark:bg-slate-700 shadow-sm text-brand-primary' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}>
-                <Upload size={18} /> Upload Image
+              <button 
+                onClick={() => setCameraMode('upload')} 
+                className={`flex flex-col items-center justify-center p-6 gap-3 rounded-2xl border-2 transition-all ${cameraMode === 'upload' ? 'border-brand-primary bg-brand-primary/5 text-brand-primary dark:bg-brand-primary/10' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500 hover:border-slate-300 dark:hover:border-slate-700 hover:text-slate-900 dark:hover:text-white'}`}
+              >
+                <Upload size={32} />
+                <span className="font-bold">Upload Images</span>
               </button>
             </div>
 

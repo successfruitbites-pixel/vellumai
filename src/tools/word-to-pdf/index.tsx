@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { PDFDocument, rgb } from 'pdf-lib';
 import { saveAs } from 'file-saver';
 import toast from 'react-hot-toast';
 import { FileText, ArrowRight } from 'lucide-react';
@@ -9,6 +8,8 @@ import { Button } from '../../components/ui/Button';
 import { useAppStore } from '../../store/appStore';
 import { UpgradeModal } from '../../components/UpgradeModal';
 import { GlassCard } from '../../components/ui/GlassCard';
+import * as mammoth from 'mammoth';
+import html2pdf from 'html2pdf.js';
 
 export default function WordToPdfTool() {
   const [file, setFile] = useState<File | null>(null);
@@ -29,28 +30,29 @@ export default function WordToPdfTool() {
     setIsProcessing(true);
 
     try {
-      // Simulate conversion by creating a simple PDF file with pdf-lib
-      // In a real application, this would involve a server-side conversion or a complex client-side library.
-      const pdfDoc = await PDFDocument.create();
-      const page = pdfDoc.addPage([600, 800]);
-      
-      page.drawText(`Converted content for: ${file.name}`, {
-        x: 50,
-        y: 700,
-        size: 16,
-        color: rgb(0, 0, 0),
-      });
+      const arrayBuffer = await file.arrayBuffer();
+      const result = await mammoth.convertToHtml({ arrayBuffer });
+      const htmlContent = result.value;
 
-      page.drawText('This is a simulated conversion output.', {
-        x: 50,
-        y: 650,
-        size: 12,
-        color: rgb(0.3, 0.3, 0.3),
-      });
+      // Wrap the HTML content in a container for styling
+      const container = document.createElement('div');
+      container.innerHTML = htmlContent;
+      // Provide basic styling for the converted document so it renders reasonably in the PDF
+      container.style.padding = '40px';
+      container.style.fontFamily = 'Arial, sans-serif';
+      container.style.fontSize = '14px';
+      container.style.lineHeight = '1.6';
+      container.style.color = '#000';
 
-      const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      saveAs(blob, `${file.name.replace(/\.docx?$/, '')}.pdf`);
+      const opt = {
+        margin:       10,
+        filename:     `${file.name.replace(/\.docx?$/, '')}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      await html2pdf().set(opt).from(container).save();
 
       toast.success('Word document successfully converted to PDF!');
       incrementTaskCount();
@@ -64,7 +66,7 @@ export default function WordToPdfTool() {
 
     } catch (error) {
       console.error(error);
-      toast.error('Failed to convert Word document.');
+      toast.error('Failed to convert Word document. Note: Only .docx files are fully supported.');
     } finally {
       setIsProcessing(false);
     }
