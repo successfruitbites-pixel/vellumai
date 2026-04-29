@@ -43,7 +43,11 @@ export const useAppStore = create<AppState>()(
       darkMode: false,
       isPro: false,
       user: { name: 'Emmanuel', email: null, avatar: null }, // Demo user
-      recentFiles: [],
+      recentFiles: [
+        { id: '1', name: 'Q3_Financial_Report.pdf', tool: 'Merge PDF', size: '2.4 MB', type: 'application/pdf', timestamp: Date.now() - 3600000 },
+        { id: '2', name: 'Profile_Picture.png', tool: 'BG Removal', size: '1.1 MB', type: 'image/png', timestamp: Date.now() - 86400000 },
+        { id: '3', name: 'Contract_Draft.pdf', tool: 'Compress PDF', size: '450 KB', type: 'application/pdf', timestamp: Date.now() - 172800000 }
+      ],
       dailyTaskCount: 0,
       lastTaskDate: new Date().toDateString(),
       MAX_FREE_TASKS: 5,

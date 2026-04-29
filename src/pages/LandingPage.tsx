@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Menu, X, Moon, Sun, ArrowRight, Wand2, FileText, Lock, FileSignature, Zap, 
   Scissors, Minimize2, FileCode2, Image as ImageIcon, CheckCircle2, MessageSquare, 
@@ -11,6 +12,7 @@ import { GlassCard } from '../components/ui/GlassCard';
 import { useAppStore } from '../store/appStore';
 
 export default function LandingPage() {
+  const navigate = useNavigate();
   const { darkMode, toggleDarkMode } = useAppStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [chatText, setChatText] = useState('');
@@ -65,7 +67,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
           
           {/* Logo */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.location.href = '/'}>
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
             <div className="w-9 h-9 rounded-xl bg-brand-primary text-white flex items-center justify-center font-syne font-bold text-xl shadow-lg shadow-blue-500/30">
               V
             </div>
@@ -73,7 +75,7 @@ export default function LandingPage() {
               Vellum AI
             </span>
             <span 
-              onClick={(e) => { e.stopPropagation(); window.location.href = '#pricing'; }}
+              onClick={(e) => { e.stopPropagation(); navigate('/#pricing'); }}
               className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-100/80 text-slate-600 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hidden sm:inline-flex hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
             >
               <span className="mr-1 text-xs text-brand-gold">✦</span> Upgrade to Pro
@@ -101,7 +103,7 @@ export default function LandingPage() {
             </button>
             <div className="hidden sm:block">
               <button 
-                onClick={() => window.location.href = '/app'}
+                onClick={() => navigate('/app')}
                 className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl text-sm transition-all shadow-lg shadow-blue-500/20 hover:-translate-y-0.5"
               >
                 Get Started Free →
@@ -155,7 +157,7 @@ export default function LandingPage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
-              <Button size="lg" variant="primary" rightIcon={<ArrowRight size={18} />} className="shadow-blue-500/20" onClick={() => window.location.href = '/app'}>
+              <Button size="lg" variant="primary" rightIcon={<ArrowRight size={18} />} className="shadow-blue-500/20" onClick={() => navigate('/app')}>
                 Start for Free
               </Button>
               <Button size="lg" variant="ghost" className="border border-slate-200 dark:border-slate-800">
@@ -577,7 +579,7 @@ export default function LandingPage() {
 
       {/* MOBILE STICKY CTA BAR */}
       <div className="md:hidden fixed bottom-0 left-0 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800 p-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] dark:shadow-none z-50 animate-on-scroll opacity-0 translate-y-8 transition-all duration-500 delay-500">
-        <Button className="w-full flex justify-between items-center px-6" variant="primary" size="lg" onClick={() => window.location.href = '/app'}>
+        <Button className="w-full flex justify-between items-center px-6" variant="primary" size="lg" onClick={() => navigate('/app')}>
           <span className="font-bold flex items-center gap-2">Start for Free <ArrowRight size={16}/></span>
           <span className="text-xs opacity-80 font-normal">No sign-up needed</span>
         </Button>

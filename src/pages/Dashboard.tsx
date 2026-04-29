@@ -5,11 +5,11 @@ import { GlassCard } from '../components/ui/GlassCard';
 import { Button } from '../components/ui/Button';
 import { 
   FileText, ArrowRight, Zap, Scissors, Minimize2, 
-  MessageSquare, Clock, ArrowUpRight, Crown, FileBadge2
+  MessageSquare, Clock, ArrowUpRight, Crown, FileBadge2, ScanLine
 } from 'lucide-react';
 
 export default function Dashboard() {
-  const { user, isPro, dailyTaskCount, MAX_FREE_TASKS, recentFiles, checkTaskLimit } = useAppStore();
+  const { user, isPro, dailyTaskCount = 0, MAX_FREE_TASKS = 5, recentFiles = [], checkTaskLimit } = useAppStore();
   const navigate = useNavigate();
   const [greeting, setGreeting] = useState('');
 

@@ -6,7 +6,9 @@ import { GlassCard } from '../components/ui/GlassCard';
 import { Button } from '../components/ui/Button';
 
 export default function FilesPage() {
-  const { recentFiles, removeRecentFile, clearRecentFiles } = useAppStore();
+  const storeRecentFiles = useAppStore(state => state.recentFiles);
+  const recentFiles = storeRecentFiles || [];
+  const { removeRecentFile, clearRecentFiles } = useAppStore();
   const navigate = useNavigate();
 
   const [searchQuery, setSearchQuery] = useState('');

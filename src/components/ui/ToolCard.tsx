@@ -60,7 +60,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
 
       <h3 className="font-syne text-xl font-bold text-slate-900 dark:text-white mb-2">{title}</h3>
       
-      <p className="font-dm-sans text-slate-500 dark:text-slate-400 flex-grow text-sm leading-relaxed mb-4 line-clamp-2">{description}</p>
+      <p className="font-dm-sans text-slate-500 dark:text-slate-400 flex-grow text-sm leading-relaxed mb-4 line-clamp-2 break-words overflow-hidden">{description}</p>
 
       <div className="mt-auto opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 font-bold text-sm hidden sm:flex items-center gap-1 text-slate-900 dark:text-white">
         Open tool →
